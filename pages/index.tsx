@@ -157,25 +157,134 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ padding: 32, fontFamily: 'sans-serif' }}>
-      <h1>Speech Pipeline Demo</h1>
-      <p>Speak into your microphone. VAD will detect speech and transcribe it.</p>
-      <div>
-        <strong>Status:</strong> {isRecording ? 'Recording...' : 'Idle'}
+    <div style={{
+      padding: '2rem',
+      maxWidth: '800px',
+      margin: '0 auto',
+      minHeight: '100vh',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      background: '#f8f9fa',
+      color: '#1a1a1a'
+    }}>
+      <div style={{
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      }}>
+        <h1 style={{
+          fontSize: '2.5rem',
+          marginBottom: '1.5rem',
+          color: '#2563eb',
+          textAlign: 'center'
+        }}>Speech Pipeline Demo</h1>
+        
+        <p style={{
+          fontSize: '1.1rem',
+          color: '#4b5563',
+          textAlign: 'center',
+          marginBottom: '2rem'
+        }}>Speak into your microphone. VAD will detect speech and transcribe it.</p>
+
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            padding: '0.5rem 1rem',
+            borderRadius: '999px',
+            background: isRecording ? '#ef4444' : '#22c55e',
+            color: 'white',
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <div style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: 'white',
+              opacity: isRecording ? '1' : '0.7'
+            }} />
+            {isRecording ? 'Recording...' : 'Idle'}
+          </div>
+        </div>
+
+        <div style={{
+          background: '#f3f4f6',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          marginBottom: '1.5rem',
+          minHeight: '100px'
+        }}>
+          <div style={{
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            color: '#6b7280',
+            marginBottom: '0.5rem'
+          }}>Transcript</div>
+          <div style={{
+            fontSize: '1.1rem',
+            color: '#1f2937',
+            lineHeight: '1.6'
+          }}>{transcript || 'No transcript yet...'}</div>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          alignItems: 'center'
+        }}>
+          <button
+            onClick={() => synthesizeSpeech(transcript)}
+            disabled={!transcript}
+            style={{
+              background: '#2563eb',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              border: 'none',
+              fontSize: '1rem',
+              fontWeight: '500',
+              cursor: transcript ? 'pointer' : 'not-allowed',
+              opacity: transcript ? '1' : '0.7',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Play Transcript
+          </button>
+
+          {audioUrl && (
+            <div style={{
+              width: '100%',
+              maxWidth: '400px',
+              background: '#f3f4f6',
+              padding: '1rem',
+              borderRadius: '8px'
+            }}>
+              <audio 
+                controls 
+                src={audioUrl} 
+                style={{
+                  width: '100%'
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
-      <div style={{ marginTop: 16 }}>
-        <strong>Transcript:</strong> {transcript}
-      </div>
-      <button
-        style={{ marginTop: 16 }}
-        onClick={() => synthesizeSpeech(transcript)}
-        disabled={!transcript}
-      >
-        Play Transcript (TTS)
-      </button>
-      {audioUrl && (
-        <audio controls src={audioUrl} style={{ marginTop: 16 }} />
-      )}
     </div>
   );
 }
